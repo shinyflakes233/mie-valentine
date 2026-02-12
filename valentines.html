@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Secure Message Portal</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #1e1e2f, #2c2c54);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    padding: 15px;
+}
+
+.container {
+    background: rgba(255,255,255,0.08);
+    padding: 30px 20px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.6);
+    backdrop-filter: blur(12px);
+    position: relative;
+    z-index: 10;
+}
+
+h2 {
+    font-size: 20px;
+}
+
+p {
+    font-size: 15px;
+}
+
+button {
+    padding: 14px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    transition: 0.3s;
+}
+
+.btn-primary { 
+    background: #ff4d6d; 
+    color: white; 
+}
+
+.btn-secondary { 
+    background: #666; 
+    color: white; 
+    position: relative; 
+}
+
+button:active {
+    transform: scale(0.97);
+}
+
+.official {
+    font-size: 11px;
+    color: #ccc;
+    margin-top: 20px;
+}
+
+/* Falling hearts */
+.heart {
+    position: absolute;
+    top: -10px;
+    color: #ff4d6d;
+    font-size: 20px;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh);
+    }
+}
+</style>
+</head>
+<body>
+
+<!-- Background Music (Mobile Friendly) -->
+<audio id="bgMusic" loop>
+    <source src="https://www.youtube.com/watch?v=LlxOzikJ0a4.mp3" type="audio/mpeg">
+</audio>
+
+<div class="container">
+    <div id="countdown"></div>
+
+    <div id="step1">
+        <h2>You have received a secure message.</h2>
+        <p>Tap 1 to continue.</p>
+        <button class="btn-primary" onclick="startMusic(); nextStep(2)">1</button>
+    </div>
+
+    <div id="step2" style="display:none;">
+        <h2>Are you sure you want to continue?</h2>
+        <p>Tap 1 to confirm.</p>
+        <button class="btn-primary" onclick="nextStep(3)">1</button>
+    </div>
+
+    <div id="step3" style="display:none;">
+        <h2>Trust Verification Successful.</h2>
+        <p>I’m glad that you trust me, Mie ❤️</p>
+        <p>Do you want to receive the official message?</p>
+        <button class="btn-primary" onclick="nextStep(4)">Yes 💕</button>
+        <button class="btn-secondary" id="noBtn">No 🙈</button>
+    </div>
+
+    <div id="step4" style="display:none;">
+        <h2>Official Message:</h2>
+        <p style="font-size:18px;">
+            Mie… 💖<br><br>
+            Do you want to be my Valentine, baby?
+        </p>
+        <button class="btn-primary" onclick="nextStep(6)">YES 💘</button>
+    </div>
+
+    <div id="step6" style="display:none;">
+        <h2>CONFIRMED ✅</h2>
+        <p>You are officially my Valentine, Mie 💝</p>
+        <p>Secure connection sealed forever.</p>
+    </div>
+
+    <div class="official">
+        Secure Message System v3.0 | Encrypted | Private | For Mie Only
+    </div>
+</div>
+
+<script>
+// Start music after user tap (required for mobile autoplay)
+function startMusic() {
+    document.getElementById("bgMusic").play();
+}
+
+// Step control
+function nextStep(step) {
+    for (let i = 1; i <= 6; i++) {
+        let el = document.getElementById("step" + i);
+        if (el) el.style.display = "none";
+    }
+    document.getElementById("step" + step).style.display = "block";
+}
+
+// Moving NO button (mobile friendly)
+const noBtn = document.getElementById("noBtn");
+if (noBtn) {
+    noBtn.addEventListener("touchstart", moveNoButton);
+    noBtn.addEventListener("mouseover", moveNoButton);
+}
+
+function moveNoButton() {
+    noBtn.style.position = "absolute";
+    noBtn.style.top = Math.random() * 200 + "px";
+    noBtn.style.left = Math.random() * 200 + "px";
+}
+
+// Falling hearts generator
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML = "❤️";
+    heart.style.left = Math.random() * window.innerWidth + "px";
+    heart.style.animationDuration = (Math.random() * 3 + 2) + "s";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 5000);
+}
+setInterval(createHeart, 400);
+
+// Countdown
+function updateCountdown() {
+    const now = new Date();
+    const year = now.getMonth() === 1 && now.getDate() > 14 ? now.getFullYear() + 1 : now.getFullYear();
+    const valentines = new Date(year, 1, 14);
+    const diff = valentines - now;
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    document.getElementById("countdown").innerHTML =
+        "Countdown to Valentine’s Day: " + days + " days 💌";
+}
+updateCountdown();
+</script>
+
+</body>
+</html>
